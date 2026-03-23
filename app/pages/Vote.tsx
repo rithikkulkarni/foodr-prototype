@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'motion/react';
 import { ThumbsUp, ThumbsDown, Star, XCircle, MapPin, ChefHat, Info, Clock } from 'lucide-react';
 import { getStore, setStore } from '../lib/store';
-import { Vote, VOTE_SCORES, VoteType, Restaurant } from '../lib/types';
+import { Vote as VoteData, VOTE_SCORES, VoteType, Restaurant } from '../lib/types';
 
 const SWIPE_THRESHOLD = 100;
 
@@ -198,7 +198,7 @@ export function Vote() {
   const [lastVote, setLastVote] = useState<VoteType | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const votesRef = useRef<Vote[]>([]);
+  const votesRef = useRef<VoteData[]>([]);
   const transitioningRef = useRef(false);
   const currentIndexRef = useRef(0);
 
@@ -216,7 +216,7 @@ export function Vote() {
       transitioningRef.current = true;
       setIsTransitioning(true);
 
-      const newVote: Vote = {
+      const newVote: VoteData = {
         restaurantId: restaurant.id,
         vote: voteType,
         score: VOTE_SCORES[voteType],

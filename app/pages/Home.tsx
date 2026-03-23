@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Users, UserCircle, ArrowRight, ChefHat } from 'lucide-react';
+import { Users, UserCircle, ArrowRight, ChefHat, User } from 'lucide-react';
 import { setStore } from '../lib/store';
 
 export function Home() {
@@ -10,6 +10,11 @@ export function Home() {
   const [joinName, setJoinName] = useState('');
   const [hostError, setHostError] = useState('');
   const [joinError, setJoinError] = useState('');
+
+  const handleSolo = () => {
+    setStore({ userName: 'Solo User', isHost: true });
+    navigate('/create-session');
+  };
 
   const handleCreateGroup = () => {
     if (!hostName.trim()) {
@@ -49,6 +54,31 @@ export function Home() {
       </div>
 
       <div className="flex flex-col gap-4">
+        {/* Solo */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center gap-2 mb-1">
+            <User className="w-5 h-5 text-emerald-600" />
+            <h2 className="text-gray-900" style={{ fontWeight: 700 }}>Solo</h2>
+          </div>
+          <p className="text-gray-400 text-sm mb-4">Start a new session to decide your restaurant</p>
+
+          <button
+            onClick={handleSolo}
+            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl flex items-center justify-center gap-2 transition active:scale-95"
+            style={{ fontWeight: 600 }}
+          >
+            Create Session
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 px-2">
+          <div className="flex-1 h-px bg-gray-200" />
+          <span className="text-gray-400 text-xs uppercase tracking-widest">or</span>
+          <div className="flex-1 h-px bg-gray-200" />
+        </div>
+
         {/* Host a Group */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center gap-2 mb-1">

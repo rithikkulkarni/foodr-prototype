@@ -95,36 +95,6 @@ export function CreateSession() {
       </div>
 
       <div className="flex-1 px-5 py-5 flex flex-col gap-5">
-        {/* Mode toggle */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-          <p className="text-gray-500 text-xs uppercase tracking-wider mb-3" style={{ fontWeight: 600 }}>
-            Session Mode
-          </p>
-          <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
-            {(['solo', 'group'] as const).map((mode) => (
-              <button
-                key={mode}
-                onClick={() => setSettings((s) => ({ ...s, mode }))}
-                className={`flex-1 py-2.5 rounded-lg text-sm capitalize transition ${
-                  settings.mode === mode
-                    ? mode === 'solo'
-                      ? 'bg-white text-emerald-700 shadow-sm'
-                      : 'bg-emerald-600 text-white shadow-sm'
-                    : 'text-gray-400 hover:text-gray-600'
-                }`}
-                style={{ fontWeight: 600 }}
-              >
-                {mode === 'solo' ? '👤 Solo' : '👥 Group'}
-              </button>
-            ))}
-          </div>
-          <p className="text-gray-400 text-xs mt-2 text-center">
-            {settings.mode === 'solo'
-              ? 'Searching for yourself'
-              : 'Create a room your friends can join'}
-          </p>
-        </div>
-
         {/* Map */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
           <p className="text-gray-500 text-xs uppercase tracking-wider mb-3" style={{ fontWeight: 600 }}>
@@ -154,27 +124,30 @@ export function CreateSession() {
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="w-4 h-4 text-emerald-600" />
               <span className="text-sm text-gray-700" style={{ fontWeight: 600 }}>Price Range</span>
+              <span className="ml-auto text-emerald-700 text-sm" style={{ fontWeight: 700 }}>
+                {PRICE_LABELS[1]} – {PRICE_LABELS[settings.maxPrice]}
+              </span>
             </div>
-            <div className="flex gap-2">
-              {PRICE_RANGES.map((p) => (
-                <button
-                  key={p.value}
-                  onClick={() => togglePriceLevel(p.value)}
-                  className={`flex-1 py-2.5 rounded-xl text-sm border transition ${
-                    isPriceSelected(p.value)
-                      ? 'bg-emerald-600 border-emerald-600 text-white'
-                      : 'bg-white border-gray-200 text-gray-400 hover:border-emerald-300 hover:text-gray-600'
-                  }`}
-                  style={{ fontWeight: 600 }}
-                  title={p.desc}
-                >
-                  {p.label}
-                </button>
-              ))}
+            <input
+              type="range"
+              min="1"
+              max="4"
+              step="1"
+              value={settings.maxPrice}
+              onChange={(e) => {
+                const val = parseInt(e.target.value);
+                setSettings((s) => ({
+                  ...s,
+                  minPrice: 1,
+                  maxPrice: val
+                }));
+              }}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+            />
+            <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <span>$ Budget</span>
+              <span>$$$$ Splurge</span>
             </div>
-            <p className="text-gray-400 text-xs mt-1.5">
-              Selected: {PRICE_LABELS[settings.minPrice]} – {PRICE_LABELS[settings.maxPrice]}
-            </p>
           </div>
 
           {/* Radius */}
@@ -188,21 +161,18 @@ export function CreateSession() {
                 {settings.radius} {settings.radius === 1 ? 'mile' : 'miles'}
               </span>
             </div>
-            <div className="flex gap-1.5 flex-wrap">
-              {RADIUS_OPTIONS.map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setSettings((s) => ({ ...s, radius: r }))}
-                  className={`px-3 py-1.5 rounded-lg text-xs border transition ${
-                    settings.radius === r
-                      ? 'bg-emerald-600 border-emerald-600 text-white'
-                      : 'bg-white border-gray-200 text-gray-500 hover:border-emerald-300'
-                  }`}
-                  style={{ fontWeight: 600 }}
-                >
-                  {r < 1 ? `${r * 5280 | 0}ft` : `${r}mi`}
-                </button>
-              ))}
+            <input
+              type="range"
+              min="0.5"
+              max="10"
+              step="0.5"
+              value={settings.radius}
+              onChange={(e) => setSettings((s) => ({ ...s, radius: parseFloat(e.target.value) }))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+            />
+            <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <span>0.5 mi</span>
+              <span>10 mi</span>
             </div>
           </div>
 
